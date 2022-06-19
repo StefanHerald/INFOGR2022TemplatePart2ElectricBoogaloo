@@ -13,10 +13,10 @@ namespace Template
 		public ObjVertex[] vertices;            // vertex positions, model space
 		public ObjTriangle[] triangles;         // triangles (3 vertex indices)
 		public ObjQuad[] quads;                 // quads (4 vertex indices)
+		public Matrix4 localPosition;           // the loacl position of a mesh
 		int vertexBufferId;                     // vertex buffer
 		int triangleBufferId;                   // triangle buffer
 		int quadBufferId;                       // quad buffer
-
 		// constructor
 		public Mesh( string fileName )
 		{
