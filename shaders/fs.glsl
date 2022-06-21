@@ -1,15 +1,19 @@
 ﻿#version 330
  
 // shader input
+in vec4 position;
+in vec4 normal;
 in vec2 uv;			// interpolated texture coordinates
-in vec4 normal;			// interpolated normal
-uniform sampler2D pixels;	// texture sampler
+uniform vec3 cameraPos;
+uniform vec3 lightPos;
+uniform vec3 lightColor;
+uniform sampler2D texture;	// texture sampler
 
 // shader output
-out vec4 outputColor;
+out vec4 color;
 
 // fragment shader
 void main()
 {
-    outputColor = texture( pixels, uv ) + 0.5f * vec4( normal.xyz, 1 );
+    color = ;
 }
