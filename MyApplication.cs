@@ -13,7 +13,7 @@ namespace Template
         Vector3 upDirection = new Vector3(1, 0, 0);
         Vector3 lookAtDirection = new Vector3(0, -1, 0);
         public Vector3 cameraPos = new Vector3();
-        public enum movementDirections {left, right, up, down, forward, backward }
+        internal enum movementDirections {left, right, up, down, forward, backward }
 
         // initialize
         public void Init()
@@ -45,31 +45,31 @@ namespace Template
             sceneGraph.Render(cameraPos, upDirection, lookAtDirection);
         }
 
-        public void Move(movementDirections direction)
+        public void Move(int direction)
         {
             switch (direction)
             {
-                case (movementDirections.left):
-
+                case (0): //left
+                    cameraPos -= Vector3.Cross(upDirection, lookAtDirection);
                     break;
 
-                case (movementDirections.right):
-
+                case (1): //right
+                    cameraPos += Vector3.Cross(upDirection, lookAtDirection); 
                     break;
 
-                case (movementDirections.up):
+                case (2): //up
                     cameraPos += upDirection;
                     break;
 
-                case (movementDirections.down):
+                case (3): //down
                     cameraPos -= upDirection;
                     break;
 
-                case (movementDirections.forward):
+                case (4): //forward
                     cameraPos += lookAtDirection;
                     break;
 
-                case (movementDirections.backward):
+                case (5): //backward
                     cameraPos -= lookAtDirection;
                     break;
             }

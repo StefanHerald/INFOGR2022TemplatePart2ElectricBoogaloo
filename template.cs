@@ -29,6 +29,7 @@ namespace Template
         static internal MyApplication app;       // instance of the application
         static bool terminated = false; // application terminates gracefully when this is true
         static OpenTK.Input.KeyboardState previousKeyboardState;
+        static int timer;
         protected override void OnLoad(EventArgs e)
         {
             // called during application initialization
@@ -60,17 +61,22 @@ namespace Template
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             // called once per frame; app logic
+            timer++;
             var keyboard = OpenTK.Input.Keyboard.GetState();
-            float move = 10f;
             if (keyboard != previousKeyboardState)
             {
                 if (keyboard[OpenTK.Input.Key.Escape]) terminated = true;
-                if (keyboard[OpenTK.Input.Key.Left]) app.cameraPos.X -= move;
-                if (keyboard[OpenTK.Input.Key.Right]) app.cameraPos.X += move;
-                if (keyboard[OpenTK.Input.Key.Up]) app.cameraPos.Y += move;
-                if (keyboard[OpenTK.Input.Key.Down]) app.cameraPos.Y -= move;
+                if (keyboard[OpenTK.Input.Key.Right]) app.Move(0);
+                if (keyboard[OpenTK.Input.Key.Left]) app.Move(1);
+                if (keyboard[OpenTK.Input.Key.Up]) app.Move(2);
+                if (keyboard[OpenTK.Input.Key.Down]) app.Move(3);
+                if (keyboard[OpenTK.Input.Key.ShiftLeft]) app.Move(4);
+                if (keyboard[OpenTK.Input.Key.Space]) app.Move(5);
+                timer = 0;
             }
             previousKeyboardState = keyboard;
+            if(timer == 1) previousKeyboardState = new OpenTK.Input.KeyboardState();
+
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
