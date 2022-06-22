@@ -16,8 +16,8 @@ namespace Template
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-            sceneGraph.AddMesh("../../assets/teapot.obj", Matrix4.CreateScale(0.5f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0));
-            sceneGraph.AddMesh("../../assets/floor.obj", Matrix4.CreateScale(4.0f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0));
+            sceneGraph.AddMesh("../../assets/teapot.obj", Matrix4.CreateScale(0.5f) );
+            sceneGraph.AddMesh("../../assets/floor.obj", Matrix4.CreateScale(4.0f) );
             // create shaders
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
@@ -31,19 +31,17 @@ namespace Template
         // tick for background surface
         public void Tick()
         {
-            screen.Clear(0);
-            screen.Print("hello world", 2, 2, 0xffff00);
+            screen.Clear(0x000010);
         }
 
         // tick for OpenGL rendering code
         public void RenderGL()
         {
             float angle90degrees = PI / 2;
-
             Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(cameraPos.X, 14.5f + cameraPos.Y, cameraPos.Z)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
             Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
            // Tcamera = Matrix4.Zero;
-            sceneGraph.Render(Tcamera, new Vector3(0, 1, 0), new Vector3(0, 0, -1));
+            sceneGraph.Render(new Vector3(0,14,0), new Vector3(1, 0, 0), new Vector3(0, -1, 0));
         }
     }
 }
