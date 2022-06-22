@@ -10,14 +10,18 @@ namespace Template
         SceneGraph sceneGraph;
         bool useRenderTarget = false;
         const float PI = 3.1415926535f;
+        Vector3 upDirection = new Vector3(1, 0, 0);
+        Vector3 lookAtDirection = new Vector3(0, -1, 0);
         public Vector3 cameraPos = new Vector3();
+        public enum movementDirections {left, right, up, down, forward, backward }
+
         // initialize
         public void Init()
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-            sceneGraph.AddMesh("../../assets/teapot.obj", Matrix4.CreateScale(0.5f) );
-            sceneGraph.AddMesh("../../assets/floor.obj", Matrix4.CreateScale(4.0f) );
+            sceneGraph.AddMesh("../../assets/teapot.obj", Matrix4.CreateScale(0.5f));
+            sceneGraph.AddMesh("../../assets/floor.obj", Matrix4.CreateScale(4.0f));
             // create shaders
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
@@ -26,6 +30,7 @@ namespace Template
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);
             sceneGraph.quad = new ScreenQuad();
+            cameraPos = new Vector3(0, 14, 0);
         }
 
         // tick for background surface
@@ -37,11 +42,37 @@ namespace Template
         // tick for OpenGL rendering code
         public void RenderGL()
         {
-            float angle90degrees = PI / 2;
-            Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(cameraPos.X, 14.5f + cameraPos.Y, cameraPos.Z)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
-            Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
-           // Tcamera = Matrix4.Zero;
-            sceneGraph.Render(new Vector3(0,14,0), new Vector3(1, 0, 0), new Vector3(0, -1, 0));
+            sceneGraph.Render(cameraPos, upDirection, lookAtDirection);
+        }
+
+        public void Move(movementDirections direction)
+        {
+            switch (direction)
+            {
+                case (movementDirections.left):
+
+                    break;
+
+                case (movementDirections.right):
+
+                    break;
+
+                case (movementDirections.up):
+                    cameraPos += upDirection;
+                    break;
+
+                case (movementDirections.down):
+                    cameraPos -= upDirection;
+                    break;
+
+                case (movementDirections.forward):
+                    cameraPos += lookAtDirection;
+                    break;
+
+                case (movementDirections.backward):
+                    cameraPos -= lookAtDirection;
+                    break;
+            }
         }
     }
 }
