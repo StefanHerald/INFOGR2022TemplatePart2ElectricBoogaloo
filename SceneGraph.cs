@@ -30,7 +30,7 @@ namespace Template
             timer = new Stopwatch();
             timer.Reset();
             timer.Start();
-            //the orthographic view volume is a box in which all object to render are. This box is arbitrarily placed, and has to be moved back to center at the origin and rotated.
+            //the orthographic view volume is a box in which all object to render are.
             orthographicViewVolume = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
         }
 
