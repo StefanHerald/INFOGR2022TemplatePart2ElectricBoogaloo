@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace Template
@@ -13,22 +14,21 @@ namespace Template
         Vector3 upDirection = new Vector3(1, 1, 0);
         Vector3 lookAtDirection = new Vector3(1, -1, 0);
         public Vector3 cameraPos = new Vector3();
-        internal enum movementDirections { left, right, up, down, forward, backward }
 
         // initialize
         public void Init()
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-            sceneGraph.AddMesh("../../assets/teapot.obj", Matrix4.CreateScale(0.5f));
-            sceneGraph.AddMesh("../../assets/floor.obj", Matrix4.CreateScale(4.0f));
+
+            sceneGraph.AddMesh(CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg", Matrix4.CreateScale(0.5f)));
+            sceneGraph.AddMesh(CreateMesh("../../assets/floor.obj", "../../assets/wood.jpg", Matrix4.CreateScale(4.0f)));
             // create shaders
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             //add lights
-            sceneGraph.AddLight(new Vector3(2,10,2), new Vector3(255,255,255));
+            sceneGraph.AddLight(new Vector3(2, 10, 2), new Vector3(255, 255, 255));
             // load a texture
-            sceneGraph.texture = new Texture("../../assets/wood.jpg");
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);
             sceneGraph.quad = new ScreenQuad();
@@ -76,22 +76,26 @@ namespace Template
                 case (5): //backward
                     cameraPos -= lookAtDirection;
                     break;
-                case (6):
+
+                case (6): //rotate the lookAtDirection around the updirection
                     lookAtDirection = Vector3.TransformPerspective(lookAtDirection, Matrix4.CreateFromAxisAngle(upDirection, PI / 16));
                     break;
-                case (7):
+
+                case (7):// rotate the updirection around the lookatdirection
                     upDirection = Vector3.TransformPerspective(upDirection, Matrix4.CreateFromAxisAngle(lookAtDirection, PI / 16));
                     break;
             }
         }
 
-        public void RotateCamera(Vector2 rotate)
+        public Mesh CreateMesh(string filename, string texture, Matrix4 transform, List<Mesh> children = null)
         {
-            //let us take the lookAtDirection as the vector we have to rotate, as it is in an unit sphere, and calculate the angle betwee the desired angle
-            Vector3.CalculateAngle(lookAtDirection, new Vector3(rotate.X, rotate.Y, 
-                Math.Abs(rotate.X-screen.width/2)/(screen.width/2) +
-                Math.Abs(rotate.Y)));
-
+            Mesh mesh = new Mesh(filename);
+            mesh.texture = new Texture(texture);
+            mesh.localPosition = transform;
+            if (children != null)
+                foreach (Mesh child in children)
+                    mesh.AddChild(child);
+            return mesh;
         }
     }
 }

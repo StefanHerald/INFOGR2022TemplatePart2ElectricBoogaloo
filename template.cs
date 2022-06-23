@@ -28,7 +28,6 @@ namespace Template
         static int screenID;            // unique integer identifier of the OpenGL texture
         static internal MyApplication app;       // instance of the application
         static bool terminated = false; // application terminates gracefully when this is true
-        static Vector2 firstPoint, secondpoint;
         protected override void OnLoad(EventArgs e)
         {
             // called during application initialization
@@ -70,16 +69,6 @@ namespace Template
             if (keyboard[OpenTK.Input.Key.Space]) app.Move(5);
             if (keyboard[OpenTK.Input.Key.Q]) app.Move(6);
             if (keyboard[OpenTK.Input.Key.E]) app.Move(7);
-            var mouse = OpenTK.Input.Mouse.GetState();
-            if (mouse.IsAnyButtonDown)
-            {
-                if (firstPoint == Vector2.Zero) firstPoint = new Vector2(mouse.X, mouse.Y);
-                secondpoint = new Vector2(mouse.X, mouse.Y);
-                app.RotateCamera(secondpoint - firstPoint);
-            }
-            else
-                firstPoint = Vector2.Zero;
-
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {

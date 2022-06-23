@@ -19,8 +19,8 @@ namespace Template
 		int triangleBufferId;                   // triangle buffer
 		int quadBufferId;                       // quad buffer
 		List<Mesh> children = new List<Mesh>(); //children of this mesh
-		Mesh parent;                        //parent of this mesh. Null if parent does not exist
-		Texture texture;                    //to be used for this texture
+		public Mesh parent;                        //parent of this mesh. Null if parent does not exist
+		public Texture texture;                    //to be used for this texture
 		// constructor
 		public Mesh( string fileName )
 		{
@@ -51,8 +51,13 @@ namespace Template
 		}
 
 		// render the mesh using the supplied shader and matrix
-		public void Render( Shader shader, Matrix4 transform, Matrix4 toWorld, Texture texture )
+		public void Render( Shader shader, Matrix4 transform, Matrix4 toWorld)
 		{
+			Matrix4 inverted = localPosition.Inverted();
+			foreach (Mesh Child in children)
+			{ 
+				Child.Render(shader, (localPosition + Child.localPosition) * (transform * inverted), toWorld + Child.localPosition);
+            }
 			// on first run, prepare buffers
 			Prepare( shader );
 
@@ -102,6 +107,11 @@ namespace Template
 			GL.PopClientAttrib();
 		}
 
+		public void AddChild(Mesh child)
+        {
+			child.parent = this;
+			children.Add(child);
+        }
 		// layout of a single vertex
 		[StructLayout( LayoutKind.Sequential )]
 		public struct ObjVertex
