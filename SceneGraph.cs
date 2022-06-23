@@ -11,6 +11,7 @@ namespace Template
     internal class SceneGraph
     {
         public List<Mesh> meshes = new List<Mesh>();
+        public List<Light> lights = new List<Light>();
         public Matrix4 cameraTransform;
         Matrix4 orthographicViewVolume;
         //texture
@@ -39,7 +40,7 @@ namespace Template
             float frameDuration = timer.ElapsedMilliseconds;
             timer.Reset();
             timer.Start();
-
+            shader.SetVec3("cameraPos", cameraPosition);
             cameraTransform = Matrix4.LookAt(cameraPosition,cameraPosition + lookAtDirection, upDirection);
             a += 0.001f * frameDuration;
             if (a > 2 * PI) a -= 2 * PI;
@@ -47,7 +48,7 @@ namespace Template
             if (useRenderTarget) target.Bind();
             foreach (Mesh mesh in meshes)
             {
-                mesh.Render(shader, mesh.localPosition * cameraTransform  * orthographicViewVolume, texture);
+                mesh.Render(shader, mesh.localPosition * cameraTransform  * orthographicViewVolume, mesh.localPosition, texture);
             }
             if (useRenderTarget) quad.Render(postproc, target.GetTextureID());
             if (useRenderTarget) target.Unbind();
@@ -59,5 +60,14 @@ namespace Template
             mesh.localPosition = pos;
             meshes.Add(mesh);
         }
+        public void AddLight(Vector3 pos, Vector3 color)
+        {
+            Light light = new Light(pos, color);
+            lights.Add(light);
+            shader.SetVec3("lightPos", light.lightPosition);
+            shader.SetVec3("lightColor", light.lightColor);
+
+        }
+
     }
 }

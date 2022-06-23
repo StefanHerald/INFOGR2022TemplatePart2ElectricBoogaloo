@@ -63,7 +63,6 @@ namespace Template
 
 			// enable shader
 			GL.UseProgram( shader.programID );
-
 			// pass transform to vertex shader
 			GL.UniformMatrix4( shader.uniform_mview, false, ref transform );
 			GL.UniformMatrix4( shader.uniform_2world, false, ref toWorld );

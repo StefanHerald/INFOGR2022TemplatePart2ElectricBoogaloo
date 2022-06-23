@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
+using OpenTK;
 
 namespace Template
 {
@@ -12,6 +13,7 @@ namespace Template
 		public int attribute_vnrm;
 		public int attribute_vuvs;
 		public int uniform_mview;
+		public int uniform_2world;
 
 		// constructor
 		public Shader( String vertexShader, String fragmentShader )
@@ -22,12 +24,14 @@ namespace Template
 			Load( fragmentShader, ShaderType.FragmentShader, programID, out fsID );
 			GL.LinkProgram( programID );
 			Console.WriteLine( GL.GetProgramInfoLog( programID ) );
-
+			
 			// get locations of shader parameters
 			attribute_vpos = GL.GetAttribLocation( programID, "vPosition" );
 			attribute_vnrm = GL.GetAttribLocation( programID, "vNormal" );
 			attribute_vuvs = GL.GetAttribLocation( programID, "vUV" );
 			uniform_mview = GL.GetUniformLocation( programID, "transform" );
+			uniform_2world = GL.GetUniformLocation( programID, "toWorld" );
+
 		}
 
 		// loading shaders
@@ -39,6 +43,11 @@ namespace Template
 			GL.CompileShader( ID );
 			GL.AttachShader( program, ID );
 			Console.WriteLine( GL.GetShaderInfoLog( ID ) );
+		}
+		//setting the variables
+		public void SetVec3(string name, Vector3 vec3)
+		{
+			GL.Uniform3(GL.GetUniformLocation(programID, name), vec3);
 		}
 	}
 }
