@@ -1,9 +1,11 @@
 ﻿#version 330
  
 // shader input
+in vec4 position;
+in vec4 normal;
 in vec2 uv;			// interpolated texture coordinates
 uniform vec3 cameraPos;
-uniform vec3 lightPos;
+vec3 lightPos;
 vec3 lightColor;
 uniform sampler2D texture;	// texture sampler
 
@@ -13,6 +15,7 @@ out vec4 outputColor;
 // fragment shader
 void main()
 {
+	lightPos = vec3(0,14,0);
 	lightColor = vec3(255,255,255);
 	//diffuse
 	vec3 L = lightPos-position.xyz;
@@ -26,5 +29,5 @@ void main()
 	vec3 viewDirection = normalize(cameraPos - position.xyz);
 	vec3 reflectDirection = reflect(-L, normalize(normal.xyz));
 	float spec=pow(max(dot(viewDirection, reflectDirection),0.0), 2048.0);
-	color = vec4(lightColor * diffuseColor * attenuation * Dot, 1.0);
+	outputColor = vec4(lightColor * diffuseColor * attenuation * Dot + spec, 1.0);
 }   

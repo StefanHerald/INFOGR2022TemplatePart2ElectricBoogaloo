@@ -8,9 +8,9 @@ uniform mat4 transform;		//Matrix to transform from object to screen space
 uniform mat4 toWorld;		//Matrix to transform from object to world space
 
 // shader output
+out vec4 position;
 out vec4 normal;		// transformed vertex normal
 out vec2 uv;				
-uniform mat4 transform;
  
 // vertex shader
 void main()
