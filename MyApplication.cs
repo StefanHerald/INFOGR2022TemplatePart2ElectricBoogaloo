@@ -20,7 +20,7 @@ namespace Template
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-
+            //add meshes to the sceneGraph
             sceneGraph.AddMesh(CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg", Matrix4.CreateScale(0.5f)));
             sceneGraph.AddMesh(CreateMesh("../../assets/floor.obj", "../../assets/wood.jpg", Matrix4.CreateScale(4.0f)));
             // create shaders
@@ -28,7 +28,6 @@ namespace Template
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             //add lights
             sceneGraph.AddLight(new Vector3(2, 10, 2), new Vector3(255, 255, 255));
-            // load a texture
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);
             sceneGraph.quad = new ScreenQuad();

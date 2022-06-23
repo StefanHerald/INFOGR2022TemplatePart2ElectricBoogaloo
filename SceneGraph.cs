@@ -14,7 +14,7 @@ namespace Template
         public List<Mesh> meshes = new List<Mesh>();
         public List<Light> lights = new List<Light>();
         public Matrix4 cameraTransform;
-        Matrix4 orthographicViewVolume;
+        Matrix4 cameraToRaster;
         //texture
         public Shader shader;                          // shader to use for rendering
         public Shader postproc;                        // shader to use for post processing
@@ -24,14 +24,21 @@ namespace Template
         float a = 0;                                    
         Stopwatch timer;                        // timer for measuring frame duration
         public bool useRenderTarget = true;    //true if you want to use the rendering target
-
+        /// <summary>
+        /// init 
+        /// </summary>
         public SceneGraph()
         {
             timer = new Stopwatch();
             //the orthographic view volume is a box in which all object to render are.
-            orthographicViewVolume = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+            cameraToRaster = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
         }
-
+        /// <summary>
+        /// Render the scene
+        /// </summary>
+        /// <param name="cameraPosition"></param>
+        /// <param name="upDirection"></param>
+        /// <param name="lookAtDirection"></param>
         public void Render(Vector3 cameraPosition, Vector3 upDirection, Vector3 lookAtDirection)
         {
             float frameDuration = timer.ElapsedMilliseconds;
@@ -51,7 +58,7 @@ namespace Template
             if (useRenderTarget) target.Bind();
             foreach (Mesh mesh in meshes)
             {
-                mesh.Render(shader, mesh.localPosition * cameraTransform  * orthographicViewVolume, mesh.localPosition);
+                mesh.Render(shader, mesh.localPosition * cameraTransform  * cameraToRaster, mesh.localPosition);
             }
             if (useRenderTarget) quad.Render(postproc, target.GetTextureID());
             if (useRenderTarget) target.Unbind();
