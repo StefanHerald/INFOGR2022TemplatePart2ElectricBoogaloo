@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 namespace Template
 {
 
@@ -40,6 +41,7 @@ namespace Template
             float frameDuration = timer.ElapsedMilliseconds;
             timer.Reset();
             timer.Start();
+            GL.UseProgram(shader.programID);
             shader.SetVec3("cameraPos", cameraPosition);
             cameraTransform = Matrix4.LookAt(cameraPosition,cameraPosition + lookAtDirection, upDirection);
             a += 0.001f * frameDuration;
@@ -64,6 +66,7 @@ namespace Template
         {
             Light light = new Light(pos, color);
             lights.Add(light);
+            GL.UseProgram(shader.programID);
             shader.SetVec3("lightPos", light.lightPosition);
             shader.SetVec3("lightColor", light.lightColor);
 
