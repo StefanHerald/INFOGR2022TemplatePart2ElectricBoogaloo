@@ -28,7 +28,7 @@ namespace Template
         static int screenID;            // unique integer identifier of the OpenGL texture
         static internal MyApplication app;       // instance of the application
         static bool terminated = false; // application terminates gracefully when this is true
-        static OpenTK.Input.KeyboardState previousKeyboardState;
+        static Vector2 firstPoint, secondpoint;
         protected override void OnLoad(EventArgs e)
         {
             // called during application initialization
@@ -61,16 +61,25 @@ namespace Template
         {
             // called once per frame; app logic
             var keyboard = OpenTK.Input.Keyboard.GetState();
-            float move = 10f;
-            if (keyboard != previousKeyboardState)
+            if (keyboard[OpenTK.Input.Key.Escape]) terminated = true;
+            if (keyboard[OpenTK.Input.Key.D]) app.Move(0);
+            if (keyboard[OpenTK.Input.Key.A]) app.Move(1);
+            if (keyboard[OpenTK.Input.Key.W]) app.Move(2);
+            if (keyboard[OpenTK.Input.Key.S]) app.Move(3);
+            if (keyboard[OpenTK.Input.Key.ShiftLeft]) app.Move(4);
+            if (keyboard[OpenTK.Input.Key.Space]) app.Move(5);
+            if (keyboard[OpenTK.Input.Key.Q]) app.Move(6);
+            if (keyboard[OpenTK.Input.Key.E]) app.Move(7);
+            var mouse = OpenTK.Input.Mouse.GetState();
+            if (mouse.IsAnyButtonDown)
             {
-                if (keyboard[OpenTK.Input.Key.Escape]) terminated = true;
-                if (keyboard[OpenTK.Input.Key.Left]) app.cameraPos.X -= move;
-                if (keyboard[OpenTK.Input.Key.Right]) app.cameraPos.X += move;
-                if (keyboard[OpenTK.Input.Key.Up]) app.cameraPos.Y += move;
-                if (keyboard[OpenTK.Input.Key.Down]) app.cameraPos.Y -= move;
+                if (firstPoint == Vector2.Zero) firstPoint = new Vector2(mouse.X, mouse.Y);
+                secondpoint = new Vector2(mouse.X, mouse.Y);
+                app.RotateCamera(secondpoint - firstPoint);
             }
-            previousKeyboardState = keyboard;
+            else
+                firstPoint = Vector2.Zero;
+
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {

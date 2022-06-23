@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -17,6 +18,9 @@ namespace Template
 		int vertexBufferId;                     // vertex buffer
 		int triangleBufferId;                   // triangle buffer
 		int quadBufferId;                       // quad buffer
+		List<Mesh> children = new List<Mesh>(); //children of this mesh
+		Mesh parent;                        //parent of this mesh. Null if parent does not exist
+		Texture texture;                    //to be used for this texture
 		// constructor
 		public Mesh( string fileName )
 		{
