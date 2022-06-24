@@ -1,18 +1,17 @@
 ﻿#version 330
  
 // shader input
-in vec4 position;
-in vec4 normal;
-in vec2 uv;            // interpolated texture coordinates
-uniform vec3 cameraPos;
-uniform vec3 lightPos;
-uniform vec3 lightColor;
-uniform sampler2D text;    // texture sampler
-uniform vec3 ray1;
-uniform vec3 ray2;
-uniform int SpotB;
-uniform vec3 Length;
-
+in vec4 position;			//position of the fragment
+in vec4 normal;				//normal of the fragment
+in vec2 uv;					// interpolated texture coordinates
+uniform vec3 cameraPos;		//position of the camera
+uniform vec3 lightPos;		//position of the light
+uniform vec3 lightColor;	//color of the light
+uniform sampler2D text;		// texture sampler
+uniform vec3 ray1;			//most left ray from the spotlight
+uniform vec3 ray2;			//most right ray from the spotlight
+uniform int SpotB;			//boolean that checks wether there is a spotlight (0 is no spotlight, 1 is spotlight)
+uniform vec3 Length;		//Describes the length between the light an the start of the ellipse (on the x and z axis)
 // shader output
 out vec4 outputColor;
 
@@ -20,9 +19,10 @@ out vec4 outputColor;
 void main()
 {
 
-	//ambient
+	//ambient lighting
 	float aStrength = 0.1;
 	vec3 ambient = aStrength * lightColor;
+
 	//initializing spotlights
 	float diamL = 0;
 	float diamW = 0;
@@ -37,7 +37,7 @@ void main()
 	}
 
 
-	//diffuse
+	//diffuse lighting
 	vec3 normalizer = normalize(normal.xyz);
 	vec3 L = lightPos - position.xyz;
 	float attenuation = 1.0 / dot(L, L);
@@ -51,7 +51,7 @@ void main()
 	vec3 diffuseColor = texture(text, uv).rgb;
 	vec3 diffuse = dStrength * lightColor;
 
-	//specular
+	//specular lighting
 	float sStrength = 0.5;
 	vec3 viewDir = normalize(cameraPos - position.xyz);
 	vec3 reflectDir = reflect(-L, normalizer);

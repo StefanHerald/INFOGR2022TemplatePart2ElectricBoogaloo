@@ -44,12 +44,13 @@ namespace Template
 			GL.AttachShader( program, ID );
 			Console.WriteLine( GL.GetShaderInfoLog( ID ) );
 		}
-		//setting the variables
+		//setting the vec3s for in the pipeline
 		public void SetVec3(string name, Vector3 vec3)
 		{
 			GL.UseProgram(programID);
 			GL.Uniform3(GL.GetUniformLocation(programID, name), vec3);
 		}
+		//sets the bool to 1 if it is a spotlight
 		public void SetBool(string name, int i)
 		{
 			GL.UseProgram(programID);

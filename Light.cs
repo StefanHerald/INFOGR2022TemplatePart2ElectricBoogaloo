@@ -12,9 +12,11 @@ namespace Template
         public float xLength, zLength;
         public Light(Vector3 lightPos, Vector3 color, bool isSpot, Vector3 Center, Vector3 Radius, Vector3 ray1, Vector3 ray2 )
         {
+            //sets all the different variables
             lightPosition = lightPos;
             lightColor = color;
             this.isSpot = isSpot;
+            //if it is a spotlight, does some calculations before it enters the pipeline
             if (isSpot)
             {
                 this.ray1 += Center - Radius;
