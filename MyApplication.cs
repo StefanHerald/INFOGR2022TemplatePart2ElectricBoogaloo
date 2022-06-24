@@ -13,6 +13,7 @@ namespace Template
         const float PI = 3.1415926535f;
         Vector3 upDirection = new Vector3(1, 1, 0);
         Vector3 lookAtDirection = new Vector3(1, -1, 0);
+        Vector3 copyUp, copyLook, copyPos;
         public Vector3 cameraPos = new Vector3();
 
         // initialize
@@ -20,27 +21,43 @@ namespace Template
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-            //add meshes to the sceneGraph
-            sceneGraph.AddMesh(CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg", Matrix4.CreateScale(0.5f)));
-            sceneGraph.AddMesh(CreateMesh("../../assets/floor.obj", "../../assets/wood.jpg", Matrix4.CreateScale(4.0f)));
+            //add meshes to the sceneGraph;
+            Mesh child = CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg",
+                Matrix4.CreateScale(1f) * Matrix4.CreateTranslation(new Vector3(20, 5, 0)));
+            child.rotate = true;
+
+            Mesh child2 = CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg",
+                Matrix4.CreateScale(1f) * Matrix4.CreateTranslation(new Vector3(-10, -5, 0)));
+            child2.rotate = true;
+
+            Mesh child3 = CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg",
+                Matrix4.CreateScale(1f) * Matrix4.CreateTranslation(new Vector3(0, 7, 9)));
+            child3.rotate = true;
+            Mesh mesh = CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg",
+             Matrix4.CreateScale(1f),new List<Mesh>() {child,child2,child3 });
+            sceneGraph.AddMesh(mesh);
+            sceneGraph.AddMesh(CreateMesh("../../assets/floor.obj", "../../assets/wood.jpg", Matrix4.CreateScale(10f)));
             // create shaders
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             //add lights
-            sceneGraph.AddLight(new Vector3(5, 10, 5), new Vector3(255, 255, 255));
-            // load a texture
+            sceneGraph.AddLight(new Vector3(0, 7, 0), new Vector3(255, 255, 255));
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);
+            //create the quad
             sceneGraph.quad = new ScreenQuad();
             cameraPos = new Vector3(0, 14, 0);
             upDirection.Normalize();
             lookAtDirection.Normalize();
+            copyUp = upDirection;
+            copyPos = cameraPos;
+            copyLook = lookAtDirection;
         }
 
         // tick for background surface
         public void Tick()
         {
-            screen.Clear(0x000010);
+            screen.Clear(0x000000);
         }
 
         // tick for OpenGL rendering code
@@ -84,9 +101,30 @@ namespace Template
                 case (7):// rotate the updirection around the lookatdirection
                     upDirection = Vector3.TransformPerspective(upDirection, Matrix4.CreateFromAxisAngle(lookAtDirection, PI / 16));
                     break;
+                case (8): //rotate forward
+                    Vector3 side = Vector3.Cross(upDirection, lookAtDirection);
+                    upDirection = Vector3.TransformPerspective(upDirection, Matrix4.CreateFromAxisAngle(side, PI / 16));
+                    lookAtDirection = Vector3.TransformPerspective(lookAtDirection, Matrix4.CreateFromAxisAngle(side, PI / 16));
+                    break;
+                case (9): //reset
+                    upDirection = copyUp;
+                    lookAtDirection = copyLook;
+                    cameraPos = copyPos;
+                    break;
             }
+            upDirection.Normalize();
+            lookAtDirection.Normalize();
+            sceneGraph.onUpdateCamera = true;
         }
-
+        /// <summary>
+        /// create a mesh using the .obj filename, the texture filename and a Matrix4 transform
+        /// you can also add children.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="texture"></param>
+        /// <param name="transform"></param>
+        /// <param name="children"></param>
+        /// <returns></returns>
         public Mesh CreateMesh(string filename, string texture, Matrix4 transform, List<Mesh> children = null)
         {
             Mesh mesh = new Mesh(filename);

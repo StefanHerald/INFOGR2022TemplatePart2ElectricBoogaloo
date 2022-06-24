@@ -14,15 +14,17 @@ namespace Template
 		public ObjVertex[] vertices;            // vertex positions, model space
 		public ObjTriangle[] triangles;         // triangles (3 vertex indices)
 		public ObjQuad[] quads;                 // quads (4 vertex indices)
-		public Matrix4 localPosition;           // the loacl position of a mesh
+		public Matrix4 localPosition;           // the local position of a mesh
 		int vertexBufferId;                     // vertex buffer
 		int triangleBufferId;                   // triangle buffer
 		int quadBufferId;                       // quad buffer
+		public bool rotate;
 		List<Mesh> children = new List<Mesh>(); //children of this mesh
 		public Mesh parent;                        //parent of this mesh. Null if parent does not exist
 		public Texture texture;                    //to be used for this texture
-		// constructor
-		public Mesh( string fileName )
+		public Vector3 min, max;				//the vector points of the bounding box
+        // constructor
+        public Mesh( string fileName )
 		{
 			MeshLoader loader = new MeshLoader();
 			loader.Load( this, fileName );
@@ -54,9 +56,10 @@ namespace Template
 		public void Render( Shader shader, Matrix4 transform, Matrix4 toWorld)
 		{
 			Matrix4 inverted = localPosition.Inverted();
+			if (rotate) localPosition *= Matrix4.CreateFromAxisAngle(new Vector3(0,1,0), (float)System.Math.PI/128);
 			foreach (Mesh Child in children)
-			{ 
-				Child.Render(shader, (localPosition + Child.localPosition) * (transform * inverted), toWorld + Child.localPosition);
+			{
+				Child.Render(shader, (localPosition * Child.localPosition) * (inverted * transform), toWorld * Child.localPosition);
             }
 			// on first run, prepare buffers
 			Prepare( shader );
@@ -106,7 +109,6 @@ namespace Template
 			GL.UseProgram( 0 );
 			GL.PopClientAttrib();
 		}
-
 		public void AddChild(Mesh child)
         {
 			child.parent = this;

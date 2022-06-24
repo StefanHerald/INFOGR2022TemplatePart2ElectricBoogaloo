@@ -53,6 +53,13 @@ namespace Template
 					float x = float.Parse( parameters[1] );
 					float y = float.Parse( parameters[2] );
 					float z = float.Parse( parameters[3] );
+					//get the lowest and highest coords
+					if(x < mesh.min.X) mesh.min.X = x;
+					if (y < mesh.min.Y) mesh.min.Y = y;
+					if (z < mesh.min.Z) mesh.min.Z = z;
+					if (x > mesh.max.X) mesh.max.X = x;
+					if (y > mesh.max.Y) mesh.max.Y = y;
+					if (z > mesh.max.Z) mesh.max.Z = z;
 					vertices.Add( new Vector3( x, y, z ) );
 					break;
 				case "vt": // texCoord

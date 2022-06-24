@@ -69,6 +69,8 @@ namespace Template
             if (keyboard[OpenTK.Input.Key.Space]) app.Move(5);
             if (keyboard[OpenTK.Input.Key.Q]) app.Move(6);
             if (keyboard[OpenTK.Input.Key.E]) app.Move(7);
+            if (keyboard[OpenTK.Input.Key.Tab]) app.Move(8);
+            if (keyboard[OpenTK.Input.Key.R]) app.Move(9); //reset
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
