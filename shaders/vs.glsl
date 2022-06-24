@@ -1,4 +1,4 @@
-﻿	#version 330
+﻿#version 330
  
 // shader input
 in vec2 vUV;			// vertex uv coordinate

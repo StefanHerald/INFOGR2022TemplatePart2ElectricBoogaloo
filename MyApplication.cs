@@ -20,7 +20,7 @@ namespace Template
         {
             sceneGraph = new SceneGraph();
             sceneGraph.useRenderTarget = useRenderTarget;
-
+            //add meshes to the sceneGraph
             sceneGraph.AddMesh(CreateMesh("../../assets/teapot.obj", "../../assets/wood.jpg", Matrix4.CreateScale(0.5f)));
             sceneGraph.AddMesh(CreateMesh("../../assets/floor.obj", "../../assets/wood.jpg", Matrix4.CreateScale(4.0f)));
             // create shaders
