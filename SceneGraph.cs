@@ -39,7 +39,6 @@ namespace Template
             timer.Reset();
             timer.Start();
             //add the camera to the shader
-            GL.UseProgram(shader.programID);
             shader.SetVec3("cameraPos", cameraPosition);
             //generate the world to camera matrix
             cameraTransform = Matrix4.LookAt(cameraPosition,cameraPosition + lookAtDirection, upDirection);
@@ -73,7 +72,6 @@ namespace Template
         {
             Light light = new Light(pos, color);
             lights.Add(light);
-            GL.UseProgram(shader.programID);
             shader.SetVec3("lightPos", light.lightPosition);
             shader.SetVec3("lightColor", light.lightColor);
         }

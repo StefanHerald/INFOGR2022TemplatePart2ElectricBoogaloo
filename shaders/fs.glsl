@@ -15,19 +15,25 @@ out vec4 outputColor;
 // fragment shader
 void main()
 {
-//	lightPos = vec3(0,14,0);
-//	lightColor = vec3(255,255,255);
+	//ambient
+	float aStrength = 0.1;
+	vec3 ambient = aStrength * lightColor;
+
 	//diffuse
-	vec3 L = lightPos-position.xyz;
+	vec3 L = lightPos - position.xyz;
+	vec3 normalizer = normalize(normal.xyz);
 	float attenuation = 1.0 / dot(L, L);
-	float Dot = max(0.0, dot(normalize(L), normalize(normal.xyz)));
+	L = normalize(L);
+	float dStrength = max(dot(normalizer, L), 0.0);
 	vec3 diffuseColor = texture(texture, uv).rgb;
+	vec3 diffuse = dStrength * lightColor;
 
 	//specular
-	
-	float strength = 0.5;
-	vec3 viewDirection = normalize(cameraPos - position.xyz);
-	vec3 reflectDirection = reflect(-L, normalize(normal.xyz));
-	float spec=pow(max(dot(viewDirection, reflectDirection),0.0), 32.0);
-	outputColor = vec4( lightColor * Dot * (diffuseColor) + attenuation , 1.0);
+	float sStrength = 0.5;
+	vec3 viewDir = normalize(cameraPos - position.xyz);
+	vec3 reflectDir = reflect(-L, normalizer);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+	vec3 specular = spec * sStrength * lightColor;
+	vec3 result = (ambient + diffuse + specular) * diffuseColor *attenuation;
+	outputColor = vec4(result, 1.0);
 }   

@@ -27,7 +27,7 @@ namespace Template
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             //add lights
-            sceneGraph.AddLight(new Vector3(2, 10, 2), new Vector3(255, 255, 255));
+            sceneGraph.AddLight(new Vector3(5, 10, 5), new Vector3(255, 255, 255));
             // load a texture
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);

@@ -47,6 +47,7 @@ namespace Template
 		//setting the variables
 		public void SetVec3(string name, Vector3 vec3)
 		{
+			GL.UseProgram(programID);
 			GL.Uniform3(GL.GetUniformLocation(programID, name), vec3);
 		}
 	}
