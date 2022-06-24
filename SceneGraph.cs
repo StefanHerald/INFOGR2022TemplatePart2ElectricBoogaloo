@@ -84,13 +84,20 @@ namespace Template
         /// </summary>
         /// <param name="pos"></param>
         /// <param name="color"></param>
-        public void AddLight(Vector3 pos, Vector3 color)
+        public void AddLight(Vector3 pos, Vector3 color, bool isSpot = false, Vector3 Center = new Vector3(), Vector3 Radius = new Vector3(), Vector3 ray1 = new Vector3(), Vector3 ray2 = new Vector3())
         {
-            Light light = new Light(pos, color);
+            Light light = new Light(pos, color, isSpot, Center, Radius, ray1, ray2);
             lights.Add(light);
             shader.SetVec3("lightPos", light.lightPosition);
             shader.SetVec3("lightColor", light.lightColor);
+            if(isSpot)
+            {
+                shader.SetBool("SpotB", 1);
+                shader.SetVec3("ray1", toArray(light.ray1));
+                shader.SetVec3("ray2", toArray(light.ray2));
+                shader.SetVec3("Length", toArray(new Vector3(light.xLength, 0, light.zLength)));
+            }
         }
-
+        }
     }
 }

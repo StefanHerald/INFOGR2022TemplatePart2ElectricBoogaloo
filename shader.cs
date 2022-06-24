@@ -45,10 +45,15 @@ namespace Template
 			Console.WriteLine( GL.GetShaderInfoLog( ID ) );
 		}
 		//setting the variables
-		public void SetVec3(string name, Vector3 vec3)
+		public void SetVec3(string name, float[] vec3, int i = 1)
 		{
 			GL.UseProgram(programID);
 			GL.Uniform3(GL.GetUniformLocation(programID, name), vec3);
+		}
+		public void SetBool(string name, int i)
+		{
+			GL.UseProgram(programID);
+			GL.Uniform1(GL.GetUniformLocation(programID, name), i);
 		}
 	}
 }

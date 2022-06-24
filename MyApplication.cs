@@ -41,7 +41,8 @@ namespace Template
             sceneGraph.shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             sceneGraph.postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             //add lights
-            sceneGraph.AddLight(new Vector3(0, 7, 0), new Vector3(255, 255, 255));
+            sceneGraph.AddLight(new Vector3(4, 4, 4), new Vector3(255, 255, 255), false, new Vector3(0), new Vector3(1,1,1));
+            // load a texture
             // create the render target
             sceneGraph.target = new RenderTarget(screen.width, screen.height);
             //create the quad
