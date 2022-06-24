@@ -90,14 +90,13 @@ namespace Template
             lights.Add(light);
             shader.SetVec3("lightPos", light.lightPosition);
             shader.SetVec3("lightColor", light.lightColor);
-            if(isSpot)
+            if (isSpot)
             {
                 shader.SetBool("SpotB", 1);
-                shader.SetVec3("ray1", toArray(light.ray1));
-                shader.SetVec3("ray2", toArray(light.ray2));
-                shader.SetVec3("Length", toArray(new Vector3(light.xLength, 0, light.zLength)));
+                shader.SetVec3("ray1", light.ray1);
+                shader.SetVec3("ray2", light.ray2);
+                shader.SetVec3("Length", new Vector3(light.xLength, 0, light.zLength));
             }
-        }
         }
     }
 }
