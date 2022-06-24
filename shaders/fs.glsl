@@ -7,7 +7,7 @@ in vec2 uv;            // interpolated texture coordinates
 uniform vec3 cameraPos;
 uniform vec3 lightPos;
 uniform vec3 lightColor;
-uniform sampler2D texture;    // texture sampler
+uniform sampler2D text;    // texture sampler
 
 // shader output
 out vec4 outputColor;
@@ -25,7 +25,7 @@ void main()
 	float attenuation = 1.0 / dot(L, L);
 	L = normalize(L);
 	float dStrength = max(dot(normalizer, L), 0.0);
-	vec3 diffuseColor = texture(texture, uv).rgb;
+	vec3 diffuseColor = texture(text, uv).rgb;
 	vec3 diffuse = dStrength * lightColor;
 
 	//specular
